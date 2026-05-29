@@ -1,4 +1,5 @@
 export { IMVLogo }          from "./IMVLogo";
+export { IMVPautaCard }     from "./IMVPautaCard";
 export { IMVPasswordGate }  from "./IMVPasswordGate";
 export { IMVHero }        from "./IMVHero";
 export { IMVFooter }      from "./IMVFooter";
