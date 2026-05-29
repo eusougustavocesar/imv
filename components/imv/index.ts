@@ -1,4 +1,5 @@
-export { IMVLogo }        from "./IMVLogo";
+export { IMVLogo }          from "./IMVLogo";
+export { IMVPasswordGate }  from "./IMVPasswordGate";
 export { IMVHero }        from "./IMVHero";
 export { IMVFooter }      from "./IMVFooter";
 export { IMVSection }     from "./IMVSection";

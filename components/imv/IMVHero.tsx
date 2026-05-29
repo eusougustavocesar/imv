@@ -3,13 +3,14 @@ import { IMVBadge } from "./IMVBadge";
 
 interface IMVHeroProps {
   eyebrow: string;
+  institution?: string;
   title: React.ReactNode;
   subtitle?: string;
   badges?: string[];
   className?: string;
 }
 
-export function IMVHero({ eyebrow, title, subtitle, badges, className }: IMVHeroProps) {
+export function IMVHero({ eyebrow, institution, title, subtitle, badges, className }: IMVHeroProps) {
   return (
     <header
       className={cn(
@@ -21,12 +22,15 @@ export function IMVHero({ eyebrow, title, subtitle, badges, className }: IMVHero
     >
       <div className="imv-wrap py-24 flex flex-col items-center text-center">
 
-        {/* Logo mark */}
-        <div className="w-8 h-px bg-[#B5894A] mb-8" />
-
-        <span className="block text-[9px] font-semibold tracking-[0.3em] uppercase text-[#C4956A] mb-6">
+        <span className="block text-[9px] font-semibold tracking-[0.3em] uppercase text-[#C4956A] mb-5">
           {eyebrow}
         </span>
+
+        {institution && (
+          <p className="font-serif text-[22px] font-semibold text-white/70 tracking-[0.04em] mb-4">
+            {institution}
+          </p>
+        )}
 
         <div className="font-serif text-[52px] font-bold text-white leading-[1.05] mb-6">
           {title}
@@ -46,8 +50,6 @@ export function IMVHero({ eyebrow, title, subtitle, badges, className }: IMVHero
           </div>
         )}
 
-        {/* Bottom mark */}
-        <div className="w-8 h-px bg-[#B5894A] mt-10" />
       </div>
     </header>
   );

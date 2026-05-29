@@ -56,9 +56,16 @@ body {
 
 /* ── Print / PDF ───────────────────────────────────── */
 @media print {
-  @page {
+  /* Primeira página (capa): sem margens, full-bleed */
+  @page :first {
     size: A4;
     margin: 0;
+  }
+
+  /* Demais páginas: buffer de 12mm top/bottom para conteúdo não tocar a borda */
+  @page {
+    size: A4;
+    margin: 12mm 0;
   }
 
   body {
@@ -74,8 +81,26 @@ body {
     padding-right: 20mm;
   }
 
+  /* Conteúdo principal reserva espaço para o footer fixo */
+  main {
+    padding-bottom: 14mm;
+  }
+
+  /* Footer fixo no rodapé de cada página */
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
   /* Não quebrar dentro de elementos chave */
-  table, blockquote, .imv-ad-grid {
+  table, blockquote, .imv-ad-grid, figure {
+    break-inside: avoid;
+  }
+
+  /* Cada card do grid de ads também não quebra */
+  .imv-ad-grid > * {
     break-inside: avoid;
   }
 
@@ -84,8 +109,9 @@ body {
     break-after: avoid;
   }
 
-  /* Seções maiores podem quebrar entre si */
-  section {
-    break-before: auto;
+  /* Parágrafos: evitar linhas órfãs/viúvas */
+  p {
+    orphans: 3;
+    widows: 3;
   }
 }

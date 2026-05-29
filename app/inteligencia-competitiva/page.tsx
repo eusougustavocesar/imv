@@ -16,6 +16,7 @@ export default function InteligenciaCompetitivaPage() {
 
       <IMVHero
         eyebrow="Inteligência Competitiva · Maio 2026"
+        institution="IMV Academy"
         title={
           <>
             Inteligência<br />
