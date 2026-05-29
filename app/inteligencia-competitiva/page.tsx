@@ -4,7 +4,8 @@ import { MercadoSection }      from "./sections/MercadoSection";
 import { ProdutoSection }      from "./sections/ProdutoSection";
 import { CompetidoresSection } from "./sections/CompetidoresSection";
 import { AnunciosSection }     from "./sections/AnunciosSection";
-import { EstrategiaSection }   from "./sections/EstrategiaSection";
+import { EstrategiaSection }     from "./sections/EstrategiaSection";
+import { ProximosPassosSection } from "./sections/ProximosPassosSection";
 
 export const metadata = {
   title: "Inteligência Competitiva de Mercado | IMV Academy",
@@ -36,6 +37,7 @@ export default function InteligenciaCompetitivaPage() {
           <CompetidoresSection />
           <AnunciosSection />
           <EstrategiaSection />
+          <ProximosPassosSection />
         </div>
       </main>
 

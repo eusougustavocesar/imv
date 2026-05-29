@@ -34,6 +34,72 @@ export const TURMA_DADOS = [
   ["Comercial",   "VD Brasil"],
 ];
 
+// ── PRÓXIMOS PASSOS ───────────────────────────────────────────────────────────
+
+export type Passo = {
+  acao: string;
+  responsavel: string;
+  prazo: string;
+  entrega: string | null; // null = pendente, "DD/MM/AAAA" = concluído
+};
+
+export const PROXIMOS_PASSOS: Passo[] = [
+  {
+    acao: "Definir orçamento de mídia paga para Junho, Julho e Agosto",
+    responsavel: "Gustavo Fortkamp",
+    prazo: "05/06/2026",
+    entrega: null,
+  },
+  {
+    acao: "Briefar VD Brasil: framing de candidatura, script de abordagem e régua de follow-up",
+    responsavel: "Gustavo Fortkamp",
+    prazo: "06/06/2026",
+    entrega: null,
+  },
+  {
+    acao: "Configurar pixel Meta, audiências-semente e lookalike do público do Dr. Gabriel Almeida",
+    responsavel: "Gustavo Fortkamp",
+    prazo: "10/06/2026",
+    entrega: null,
+  },
+  {
+    acao: "Gravar vídeos de topo de funil com Dr. Diogo (GLP-1, epidemia de obesidade, metabologia)",
+    responsavel: "Gustavo Fortkamp + Dr. Diogo",
+    prazo: "13/06/2026",
+    entrega: null,
+  },
+  {
+    acao: "Subir campanhas Fase 1: educação e conscientização (Junho)",
+    responsavel: "Gustavo Fortkamp",
+    prazo: "16/06/2026",
+    entrega: null,
+  },
+  {
+    acao: "Produzir criativos Fase 2: corpo docente, módulos e bastidores do produto",
+    responsavel: "Gustavo Fortkamp",
+    prazo: "30/06/2026",
+    entrega: null,
+  },
+  {
+    acao: "Subir campanhas Fase 2: consideração e prova de profundidade (Julho)",
+    responsavel: "Gustavo Fortkamp",
+    prazo: "01/07/2026",
+    entrega: null,
+  },
+  {
+    acao: "Abrir formulário de candidatura à Turma 2026",
+    responsavel: "Gustavo Fortkamp + Dr. Diogo",
+    prazo: "01/08/2026",
+    entrega: null,
+  },
+  {
+    acao: "Ativar retargeting de conversão e escassez real de vagas (Agosto)",
+    responsavel: "Gustavo Fortkamp",
+    prazo: "04/08/2026",
+    entrega: null,
+  },
+];
+
 // ── PRODUTO ───────────────────────────────────────────────────────────────────
 
 export const CORPO_DOCENTE = [
