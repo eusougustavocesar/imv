@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+@import "tailwindcss";
+
+/* ── IMV Design Tokens ─────────────────────────────── */
+:root {
+  /* Brand */
+  --imv-dark:       #1C1C1A;
+  --imv-copper:     #B5894A;
+  --imv-copper-mid: #C4956A;
+  --imv-cream:      #F8F4EE;
+  --imv-beige:      #EDE6DC;
+  --imv-white:      #FEFCF9;
+  --imv-border:     #DDD5C8;
+  --imv-text:       #2E2B28;
+  --imv-muted:      #7A706A;
+
+  /* Grid — A4: 210mm total, 20mm margens, 170mm conteúdo */
+  --imv-page-w:  210mm;
+  --imv-gutter:  20mm;
+
+  /* Typography */
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans:  'Inter', system-ui, sans-serif;
+}
+
+/* ── Base ──────────────────────────────────────────── */
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  color: var(--imv-text);
+  background: var(--imv-white);
+  font-size: 14px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Utilities ─────────────────────────────────────── */
+.font-serif  { font-family: var(--font-serif); }
+.font-sans   { font-family: var(--font-sans); }
+.text-copper { color: var(--imv-copper); }
+.text-muted  { color: var(--imv-muted); }
+.bg-dark     { background-color: var(--imv-dark); }
+.bg-cream    { background-color: var(--imv-cream); }
+.border-imv  { border-color: var(--imv-border); }
+
+/* Container único compartilhado por todas as seções */
+.imv-wrap {
+  max-width: var(--imv-page-w);
+  margin: 0 auto;
+  padding-left: var(--imv-gutter);
+  padding-right: var(--imv-gutter);
+  width: 100%;
+}
+
+/* ── Print / PDF ───────────────────────────────────── */
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    background: white;
+    font-size: 11pt;
+  }
+
+  .imv-wrap {
+    max-width: 210mm;
+    padding-left: 20mm;
+    padding-right: 20mm;
+  }
+
+  /* Não quebrar dentro de elementos chave */
+  table, blockquote, .imv-ad-grid {
+    break-inside: avoid;
+  }
+
+  /* Não quebrar logo após títulos */
+  h2, h3 {
+    break-after: avoid;
+  }
+
+  /* Seções maiores podem quebrar entre si */
+  section {
+    break-before: auto;
+  }
+}
