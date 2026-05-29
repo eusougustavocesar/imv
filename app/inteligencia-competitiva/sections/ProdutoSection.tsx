@@ -1,10 +1,14 @@
 import { IMVSection, IMVTable, IMVSubheading, IMVBlockquote } from "@/components/imv";
-import { MODULOS, DIFERENCIAIS_LP } from "../data";
+import { CORPO_DOCENTE, MODULOS, DIFERENCIAIS_LP } from "../data";
 
 export function ProdutoSection() {
   return (
     <IMVSection eyebrow="Produto" title="O Produto" id="produto">
-      <IMVSubheading first>Grade Curricular: 12 Módulos</IMVSubheading>
+
+      <IMVSubheading first>Corpo Docente — 9 especialistas</IMVSubheading>
+      <IMVTable headers={["Professor", "Especialidade"]} rows={CORPO_DOCENTE} compact />
+
+      <IMVSubheading>Grade Curricular: 12 Módulos</IMVSubheading>
       <IMVTable headers={["#", "Módulo"]} rows={MODULOS} compact />
 
       <IMVSubheading>Diferenciais comunicados na página de vendas</IMVSubheading>
@@ -22,6 +26,7 @@ export function ProdutoSection() {
         parte de uma formação que não está aberta para qualquer um. A candidatura
         é o primeiro ato de pertencimento."
       </IMVBlockquote>
+
     </IMVSection>
   );
 }

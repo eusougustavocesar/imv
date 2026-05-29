@@ -13,8 +13,8 @@ export const KEY_FINDINGS = [
   },
   {
     label: "Timing de mercado excepcional",
-    value: "Ozempic genérico em março/2026",
-    detail: "A turma de setembro/2026 entra no mercado no exato pico de demanda por GLP-1.",
+    value: "Patente do Ozempic vence em março/2026",
+    detail: "Biossimilares nacionais entram no mercado. A turma de setembro/2026 se forma no pico da demanda por GLP-1.",
   },
   {
     label: "Prêmio de preço sem concorrente",
@@ -25,21 +25,35 @@ export const KEY_FINDINGS = [
 
 export const TURMA_DADOS = [
   ["Início",      "1º de setembro de 2026"],
+  ["Duração",     "12 meses"],
   ["Vagas",       "130 a 180 médicos"],
   ["Ticket",      "R$ 41.000 (uso interno)"],
-  ["Formato",     "12 módulos · 3 presenciais em SP · Congresso"],
+  ["Formato",     "12 módulos gravados + 3 presenciais em SP + Congresso de Encerramento"],
+  ["Acesso",      "12 meses após o início"],
   ["Certificação","MEC"],
   ["Comercial",   "VD Brasil"],
 ];
 
 // ── PRODUTO ───────────────────────────────────────────────────────────────────
 
+export const CORPO_DOCENTE = [
+  ["Dr. Diogo Antonielo",                 "Coordenação Científica · Medicina Metabólica"],
+  ["Dra. Adriane Pitta",                  "Clínica Geral · Endocrinologia · Certificação Internacional em Obesidade"],
+  ["Dr. André Lage",                      "Medicina Esportiva · Ortopedia"],
+  ["Douglas Barão",                       "Nutrição Clínica e Esportiva"],
+  ["Dra. Loreta Canivilo",               "Ginecologia Endócrina · Endocrinologia · Nutrologia"],
+  ["Dra. Mariana Lara Batista de Oliveira","Medicina Esportiva · Nutrologia"],
+  ["Dr. Willian Komatsu",                 "Fisiologia e Exercício"],
+  ["Dr. Wilmar Jorge Accursio",           "Endocrinologia · Metabologia · Nutrologia"],
+  ["Biohacker Tonton",                    "Biohacking · Farmacologia · Alta Performance"],
+];
+
 export const MODULOS = [
   ["01", "Fundamentos do Metabolismo Humano"],
   ["02", "Hormônios e Controle Metabólico"],
   ["03", "Fisiopatologia e Farmacologia da Obesidade"],
   ["04", "Farmacologia Avançada e Peptídeos"],
-  ["05", "Eixo Intestino-Cérebro e Microbiota"],
+  ["05", "Eixo Intestino Cérebro e Microbiota"],
   ["06", "Medicina de Precisão e Exames Avançados"],
   ["07", "Estratégias Nutricionais para Emagrecimento e Hipertrofia"],
   ["08", "Recursos Ergogênicos e Performance"],
