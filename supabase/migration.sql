@@ -67,12 +67,6 @@ DROP POLICY IF EXISTS "profiles_self_read" ON profiles;
 CREATE POLICY "profiles_self_read" ON profiles
   FOR SELECT USING (auth.uid() = id);
 
-DROP POLICY IF EXISTS "profiles_admin_read" ON profiles;
-CREATE POLICY "profiles_admin_read" ON profiles
-  FOR SELECT USING (
-    EXISTS (SELECT 1 FROM profiles p WHERE p.id = auth.uid() AND p.role = 'admin')
-  );
-
 -- 6. RLS em materials
 ALTER TABLE materials ENABLE ROW LEVEL SECURITY;
 
@@ -80,15 +74,24 @@ DROP POLICY IF EXISTS "materials_authenticated_read" ON materials;
 CREATE POLICY "materials_authenticated_read" ON materials
   FOR SELECT TO authenticated USING (true);
 
-DROP POLICY IF EXISTS "materials_admin_write" ON materials;
-CREATE POLICY "materials_admin_write" ON materials
-  FOR ALL TO authenticated
-  USING (
-    EXISTS (SELECT 1 FROM profiles p WHERE p.id = auth.uid() AND p.role = 'admin')
-  )
+-- Políticas de escrita separadas por operação (FOR ALL causa recursão via profiles)
+DROP POLICY IF EXISTS "materials_admin_insert" ON materials;
+CREATE POLICY "materials_admin_insert" ON materials
+  FOR INSERT TO authenticated
   WITH CHECK (
-    EXISTS (SELECT 1 FROM profiles p WHERE p.id = auth.uid() AND p.role = 'admin')
+    (SELECT role FROM profiles WHERE id = auth.uid()) = 'admin'
   );
+
+DROP POLICY IF EXISTS "materials_admin_update" ON materials;
+CREATE POLICY "materials_admin_update" ON materials
+  FOR UPDATE TO authenticated
+  USING ((SELECT role FROM profiles WHERE id = auth.uid()) = 'admin')
+  WITH CHECK ((SELECT role FROM profiles WHERE id = auth.uid()) = 'admin');
+
+DROP POLICY IF EXISTS "materials_admin_delete" ON materials;
+CREATE POLICY "materials_admin_delete" ON materials
+  FOR DELETE TO authenticated
+  USING ((SELECT role FROM profiles WHERE id = auth.uid()) = 'admin');
 
 -- 7. Seed inicial
 INSERT INTO materials (title, description, type, status, author, path, featured, tags)
