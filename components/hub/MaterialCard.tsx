@@ -61,8 +61,8 @@ export function MaterialCard({ material, featured = false }: { material: Materia
 
         <div className="flex items-center justify-between mt-4 pt-3 border-t border-imv-line">
           <span className="text-meta text-imv-subtle">Por {material.author}</span>
-          <span className="text-caption font-semibold text-imv-copper group-hover:translate-x-0.5 transition-transform">
-            Abrir →
+          <span className="text-caption text-imv-copper opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all">
+            →
           </span>
         </div>
       </div>
