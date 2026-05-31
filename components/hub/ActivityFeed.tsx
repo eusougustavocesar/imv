@@ -16,16 +16,18 @@ export function ActivityFeed({ items }: { items: Material[] }) {
   return (
     <div className="space-y-2.5">
       {items.map(item => {
-        const isNew = item.created_at === item.updated_at
+        const isNew = Math.abs(
+          new Date(item.updated_at).getTime() - new Date(item.created_at).getTime()
+        ) < 2000
         return (
           <div key={item.id} className="flex items-start gap-3 text-[12px]">
-            <span className="text-[#B5894A] font-bold shrink-0 mt-0.5">·</span>
-            <span className="text-[#7A706A] leading-[1.5]">
-              <span className="font-semibold text-[#2E2B28]">{item.author}</span>
+            <span className="text-imv-copper font-bold shrink-0 mt-0.5">·</span>
+            <span className="text-imv-muted leading-[1.5]">
+              <span className="font-semibold text-imv-text">{item.author}</span>
               {" "}{isNew ? "adicionou" : "atualizou"}{" "}
-              <span className="text-[#2E2B28]">{item.title}</span>
+              <span className="text-imv-text">{item.title}</span>
             </span>
-            <span className="text-[#B5894A] text-[10px] shrink-0 ml-auto mt-0.5">
+            <span className="text-imv-copper text-[10px] shrink-0 ml-auto mt-0.5">
               {timeAgo(item.updated_at)}
             </span>
           </div>

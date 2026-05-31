@@ -44,10 +44,9 @@ export function HomeContent({ materials, isAdmin }: Props) {
         />
       )}
 
-      {/* Em Destaque — só quando não está filtrando por tipo */}
       {!isFiltering && featured.length > 0 && (
         <section className="mb-10">
-          <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#B5894A] mb-4">
+          <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-imv-copper mb-4">
             Em Destaque
           </p>
           <div className="grid gap-4">
@@ -56,11 +55,10 @@ export function HomeContent({ materials, isAdmin }: Props) {
         </section>
       )}
 
-      {/* Materiais */}
       {(isFiltering ? filtered : regular).length > 0 && (
         <section className="mb-10">
           {!isFiltering && (
-            <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#7A706A] mb-4">
+            <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-imv-muted mb-4">
               Materiais · {regular.length + featured.length}
             </p>
           )}
@@ -72,10 +70,9 @@ export function HomeContent({ materials, isAdmin }: Props) {
         </section>
       )}
 
-      {/* Arquivados — só quando não há filtro ativo */}
       {!isFiltering && archived.length > 0 && (
         <section className="mb-10">
-          <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#B5B0AA] mb-4">
+          <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-imv-subtle mb-4">
             Arquivados · {archived.length}
           </p>
           <div className="grid gap-3 opacity-60">
@@ -84,28 +81,26 @@ export function HomeContent({ materials, isAdmin }: Props) {
         </section>
       )}
 
-      {/* Sem resultados */}
       {filtered.length === 0 && materials.length > 0 && (
-        <div className="text-center py-16 text-[#B5B0AA]">
+        <div className="text-center py-16 text-imv-subtle">
           <p className="text-[13px]">Nenhum material com esse filtro.</p>
         </div>
       )}
 
       {materials.length === 0 && (
-        <div className="text-center py-20 text-[#B5B0AA]">
+        <div className="text-center py-20 text-imv-subtle">
           <p className="text-[13px]">Nenhum material ainda.</p>
           {isAdmin && (
-            <Link href="/admin" className="text-[12px] text-[#B5894A] mt-2 inline-block hover:underline">
+            <Link href="/admin" className="text-[12px] text-imv-copper mt-2 inline-block hover:underline">
               Adicionar material no painel admin →
             </Link>
           )}
         </div>
       )}
 
-      {/* Activity Feed */}
       {recent.length > 0 && (
-        <section className="mt-4 pt-8 border-t border-[#DDD5C8]">
-          <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#B5B0AA] mb-4">
+        <section className="mt-4 pt-8 border-t border-imv-border">
+          <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-imv-subtle mb-4">
             Atividade Recente
           </p>
           <ActivityFeed items={recent} />

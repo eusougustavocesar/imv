@@ -34,10 +34,10 @@ export default async function AdminPage() {
   }))
 
   return (
-    <div className="min-h-screen bg-[#FEFCF9]">
+    <div className="min-h-screen bg-imv-white">
 
-      <header className="bg-[#1C1C1A] border-b border-[#353530] sticky top-0 z-10">
-        <div className="max-w-[940px] mx-auto px-8 h-14 flex items-center justify-between">
+      <header className="bg-imv-dark border-b border-imv-dark-border sticky top-0 z-10">
+        <div className="hub-wrap h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Image
               src="/logos/LOGO - ASSINATURA - BRANCO@4x.png"
@@ -46,7 +46,7 @@ export default async function AdminPage() {
               height={30}
               className="object-contain"
             />
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#B5894A] border-l border-white/10 pl-3">
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-imv-copper border-l border-white/10 pl-3">
               Admin
             </span>
           </div>
@@ -59,36 +59,33 @@ export default async function AdminPage() {
         </div>
       </header>
 
-      <main className="max-w-[940px] mx-auto px-8 py-10">
+      <main className="hub-wrap py-10">
 
-        {/* Materiais */}
         <div className="flex items-baseline justify-between mb-6">
-          <h1 className="font-serif text-[22px] text-[#1C1C1A]">Materiais</h1>
-          <span className="text-[11px] text-[#B5B0AA]">{materials?.length ?? 0} cadastrados</span>
+          <h1 className="font-serif text-[22px] text-imv-dark">Materiais</h1>
+          <span className="text-[11px] text-imv-subtle">{materials?.length ?? 0} cadastrados</span>
         </div>
 
         <AdminMaterialsTable materials={materials ?? []} />
 
-        {/* Novo material */}
-        <div className="mt-12 pt-8 border-t border-[#DDD5C8]">
-          <h2 className="font-serif text-[18px] text-[#1C1C1A] mb-6">Novo Material</h2>
+        <div className="mt-12 pt-8 border-t border-imv-border">
+          <h2 className="font-serif text-[18px] text-imv-dark mb-6">Novo Material</h2>
           <NewMaterialForm />
         </div>
 
-        {/* Usuários */}
-        <div className="mt-12 pt-8 border-t border-[#DDD5C8]">
+        <div className="mt-12 pt-8 border-t border-imv-border">
           <div className="flex items-baseline justify-between mb-6">
-            <h2 className="font-serif text-[18px] text-[#1C1C1A]">Usuários</h2>
-            <span className="text-[11px] text-[#B5B0AA]">{users.length} membros</span>
+            <h2 className="font-serif text-[18px] text-imv-dark">Usuários</h2>
+            <span className="text-[11px] text-imv-subtle">{users.length} membros</span>
           </div>
           <UsersTable users={users} />
-          <p className="text-[10px] text-[#B5B0AA] mt-3">
+          <p className="text-[10px] text-imv-subtle mt-3">
             Clique no role para alternar entre viewer e admin. Novos usuários são criados no{" "}
             <a
               href="https://supabase.com/dashboard/project/mdwnsmelijqyzfewey/auth/users"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#B5894A] hover:underline"
+              className="text-imv-copper hover:underline"
             >
               Supabase Dashboard
             </a>.

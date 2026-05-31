@@ -13,14 +13,14 @@ type UserRow = {
 
 export function UsersTable({ users }: { users: UserRow[] }) {
   if (users.length === 0) {
-    return <p className="text-[12px] text-[#B5B0AA] text-center py-6">Nenhum usuário.</p>
+    return <p className="text-[12px] text-imv-subtle text-center py-6">Nenhum usuário.</p>
   }
 
   return (
-    <div className="rounded-xl border border-[#DDD5C8] overflow-hidden">
+    <div className="rounded-xl border border-imv-border overflow-hidden">
       <table className="w-full text-[12px]">
         <thead>
-          <tr className="bg-[#1C1C1A]">
+          <tr className="bg-imv-dark">
             {["Usuário", "Role", "Desde"].map(h => (
               <th key={h} className="text-left px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.08em] text-white/60 first:rounded-tl-xl last:rounded-tr-xl">
                 {h}
@@ -28,7 +28,7 @@ export function UsersTable({ users }: { users: UserRow[] }) {
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-[#EDE6DC]">
+        <tbody className="divide-y divide-imv-beige">
           {users.map(u => <UserRow key={u.id} user={u} />)}
         </tbody>
       </table>
@@ -49,10 +49,10 @@ function UserRow({ user }: { user: UserRow }) {
   }
 
   return (
-    <tr className="bg-white hover:bg-[#F8F4EE] transition-colors">
+    <tr className="bg-white hover:bg-imv-cream transition-colors">
       <td className="px-4 py-3">
-        <p className="font-semibold text-[#1C1C1A]">{user.name || "—"}</p>
-        <p className="text-[10px] text-[#B5B0AA]">{user.email}</p>
+        <p className="font-semibold text-imv-dark">{user.name || "—"}</p>
+        <p className="text-[10px] text-imv-subtle">{user.email}</p>
       </td>
       <td className="px-4 py-3">
         <button
@@ -61,14 +61,14 @@ function UserRow({ user }: { user: UserRow }) {
           className={[
             "text-[10px] font-bold uppercase tracking-[0.08em] px-3 py-1 rounded border transition-all disabled:opacity-50",
             role === "admin"
-              ? "bg-[#B5894A]/15 text-[#7A5C2A] border-[#B5894A]/40 hover:bg-[#B5894A]/25"
-              : "bg-[#EDE6DC] text-[#7A706A] border-[#DDD5C8] hover:border-[#B5894A]/30",
+              ? "bg-imv-copper/15 text-imv-copper-dark border-imv-copper/40 hover:bg-imv-copper/25"
+              : "bg-imv-beige text-imv-muted border-imv-border hover:border-imv-copper/30",
           ].join(" ")}
         >
           {saving ? "..." : role}
         </button>
       </td>
-      <td className="px-4 py-3 text-[#B5B0AA]">
+      <td className="px-4 py-3 text-imv-subtle">
         {new Date(user.created_at).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" })}
       </td>
     </tr>

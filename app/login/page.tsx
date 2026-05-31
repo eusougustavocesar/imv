@@ -31,7 +31,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#1C1C1A] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-imv-dark flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
 
         <div className="flex justify-center mb-10">
@@ -44,7 +44,7 @@ export default function LoginPage() {
           />
         </div>
 
-        <div className="bg-[#252522] border border-[#353530] rounded-2xl px-8 py-8">
+        <div className="bg-imv-surface border border-imv-dark-border rounded-2xl px-8 py-8">
           <h1 className="font-serif text-[20px] text-white text-center mb-1">IMV Hub</h1>
           <p className="text-[10px] text-white/30 text-center mb-8 tracking-[0.15em] uppercase">
             Acesso Restrito
@@ -61,7 +61,7 @@ export default function LoginPage() {
                 onChange={e => setEmail(e.target.value)}
                 required
                 autoComplete="email"
-                className="w-full bg-[#1C1C1A] border border-[#404040] rounded-lg px-4 py-2.5 text-[13px] text-white placeholder-white/20 focus:outline-none focus:border-[#B5894A] transition-colors"
+                className="w-full bg-imv-dark border border-imv-dark-input rounded-lg px-4 py-2.5 text-[13px] text-white placeholder-white/20 focus:outline-none focus:border-imv-copper transition-colors"
                 placeholder="seu@email.com"
               />
             </div>
@@ -76,7 +76,7 @@ export default function LoginPage() {
                 onChange={e => setPassword(e.target.value)}
                 required
                 autoComplete="current-password"
-                className="w-full bg-[#1C1C1A] border border-[#404040] rounded-lg px-4 py-2.5 text-[13px] text-white placeholder-white/20 focus:outline-none focus:border-[#B5894A] transition-colors"
+                className="w-full bg-imv-dark border border-imv-dark-input rounded-lg px-4 py-2.5 text-[13px] text-white placeholder-white/20 focus:outline-none focus:border-imv-copper transition-colors"
                 placeholder="••••••••"
               />
             </div>
@@ -88,7 +88,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#B5894A] hover:bg-[#C4956A] text-white font-bold text-[13px] py-2.5 rounded-lg transition-colors disabled:opacity-50 mt-2"
+              className="w-full bg-imv-copper hover:bg-imv-copper-mid text-white font-bold text-[13px] py-2.5 rounded-lg transition-colors disabled:opacity-50 mt-2"
             >
               {loading ? "Entrando..." : "Entrar"}
             </button>

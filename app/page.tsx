@@ -21,10 +21,10 @@ export default async function HomePage() {
   const materials: Material[] = materialsData ?? []
 
   return (
-    <div className="min-h-screen bg-[#FEFCF9]">
+    <div className="min-h-screen bg-imv-white">
 
-      <header className="bg-[#1C1C1A] border-b border-[#353530] sticky top-0 z-10">
-        <div className="max-w-[940px] mx-auto px-8 h-14 flex items-center justify-between">
+      <header className="bg-imv-dark border-b border-imv-dark-border sticky top-0 z-10">
+        <div className="hub-wrap h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Image
               src="/logos/LOGO - ASSINATURA - BRANCO@4x.png"
@@ -39,7 +39,7 @@ export default async function HomePage() {
           </div>
           <div className="flex items-center gap-5">
             {isAdmin && (
-              <Link href="/admin" className="text-[11px] font-semibold text-[#B5894A] hover:text-[#C4956A] transition-colors">
+              <Link href="/admin" className="text-[11px] font-semibold text-imv-copper hover:text-imv-copper-mid transition-colors">
                 Painel Admin
               </Link>
             )}
@@ -48,7 +48,7 @@ export default async function HomePage() {
         </div>
       </header>
 
-      <main className="max-w-[940px] mx-auto px-8 py-10">
+      <main className="hub-wrap py-10">
         <HomeContent materials={materials} isAdmin={isAdmin} />
       </main>
 

@@ -54,8 +54,8 @@ export function NewMaterialForm() {
     setLoading(false)
   }
 
-  const inputClass = "w-full bg-white border border-[#DDD5C8] rounded-lg px-3 py-2.5 text-[12px] text-[#2E2B28] focus:outline-none focus:border-[#B5894A] transition-colors placeholder-[#C5C0BB]"
-  const labelClass = "block text-[9px] font-bold uppercase tracking-[0.15em] text-[#7A706A] mb-1.5"
+  const inputClass = "w-full bg-white border border-imv-border rounded-lg px-3 py-2.5 text-[12px] text-imv-text focus:outline-none focus:border-imv-copper transition-colors placeholder-imv-subtle"
+  const labelClass = "block text-[9px] font-bold uppercase tracking-[0.15em] text-imv-muted mb-1.5"
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -108,7 +108,7 @@ export function NewMaterialForm() {
         <button
           type="submit"
           disabled={loading}
-          className="bg-[#1C1C1A] text-white font-bold text-[12px] px-6 py-2.5 rounded-lg hover:bg-[#2E2B28] transition-colors disabled:opacity-50"
+          className="bg-imv-dark text-white font-bold text-[12px] px-6 py-2.5 rounded-lg hover:bg-imv-text transition-colors disabled:opacity-50"
         >
           {loading ? "Criando..." : "Criar Material"}
         </button>

@@ -28,7 +28,7 @@ type Props = {
 
 export function FilterBar({ type, status, onType, onStatus, total }: Props) {
   return (
-    <div className="flex flex-wrap items-center gap-4 mb-8 pb-6 border-b border-[#EDE6DC]">
+    <div className="flex flex-wrap items-center gap-4 mb-8 pb-6 border-b border-imv-beige">
       <div className="flex items-center gap-1.5 flex-wrap">
         {TYPES.map(t => (
           <button
@@ -37,8 +37,8 @@ export function FilterBar({ type, status, onType, onStatus, total }: Props) {
             className={[
               "text-[10px] font-bold uppercase tracking-[0.1em] px-3 py-1.5 rounded-lg border transition-all",
               type === t.value
-                ? "bg-[#1C1C1A] text-white border-[#1C1C1A]"
-                : "bg-white text-[#7A706A] border-[#DDD5C8] hover:border-[#B5894A]/40 hover:text-[#2E2B28]",
+                ? "bg-imv-dark text-white border-imv-dark"
+                : "bg-white text-imv-muted border-imv-border hover:border-imv-copper/40 hover:text-imv-text",
             ].join(" ")}
           >
             {t.label}
@@ -46,7 +46,7 @@ export function FilterBar({ type, status, onType, onStatus, total }: Props) {
         ))}
       </div>
 
-      <div className="h-4 w-px bg-[#DDD5C8] hidden sm:block" />
+      <div className="h-4 w-px bg-imv-border hidden sm:block" />
 
       <div className="flex items-center gap-1.5 flex-wrap">
         {STATUSES.map(s => (
@@ -56,8 +56,8 @@ export function FilterBar({ type, status, onType, onStatus, total }: Props) {
             className={[
               "text-[10px] font-bold uppercase tracking-[0.1em] px-3 py-1.5 rounded-lg border transition-all",
               status === s.value
-                ? "bg-[#B5894A] text-white border-[#B5894A]"
-                : "bg-white text-[#7A706A] border-[#DDD5C8] hover:border-[#B5894A]/40 hover:text-[#2E2B28]",
+                ? "bg-imv-copper text-white border-imv-copper"
+                : "bg-white text-imv-muted border-imv-border hover:border-imv-copper/40 hover:text-imv-text",
             ].join(" ")}
           >
             {s.label}
@@ -65,7 +65,7 @@ export function FilterBar({ type, status, onType, onStatus, total }: Props) {
         ))}
       </div>
 
-      <span className="text-[10px] text-[#B5B0AA] ml-auto">
+      <span className="text-[10px] text-imv-subtle ml-auto">
         {total} {total === 1 ? "material" : "materiais"}
       </span>
     </div>
