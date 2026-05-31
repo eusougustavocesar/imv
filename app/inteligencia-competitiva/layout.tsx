@@ -1,3 +1,10 @@
+import { HubNavBar } from "@/components/hub/HubNavBar"
+
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return (
+    <>
+      <HubNavBar />
+      {children}
+    </>
+  )
 }

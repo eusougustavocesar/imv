@@ -1,8 +1,16 @@
 "use client"
 
 import { useState } from "react"
-import type { Material, MaterialStatus } from "@/lib/supabase/types"
-import { updateMaterialStatus, toggleFeatured, updateResultado, deleteMaterial } from "./actions"
+import type { Material, MaterialStatus, MaterialType } from "@/lib/supabase/types"
+import { updateMaterialStatus, toggleFeatured, updateResultado, updateMaterial, deleteMaterial } from "./actions"
+
+const TYPE_OPTIONS = [
+  { value: "pesquisa", label: "Pesquisa" },
+  { value: "pauta", label: "Pauta" },
+  { value: "estrategia", label: "Estratégia" },
+  { value: "campanha", label: "Campanha" },
+  { value: "outro", label: "Outro" },
+]
 
 const STATUS_OPTIONS = [
   { value: "rascunho", label: "Rascunho" },
@@ -15,6 +23,9 @@ const STATUS_STYLE: Record<string, string> = {
   rascunho: "bg-[#EDE6DC] text-[#7A706A] border-[#DDD5C8]",
   arquivado: "bg-gray-50 text-gray-400 border-gray-200",
 }
+
+const inputClass = "w-full bg-white border border-[#DDD5C8] rounded-lg px-3 py-2 text-[12px] text-[#2E2B28] focus:outline-none focus:border-[#B5894A] transition-colors placeholder-[#C5C0BB]"
+const labelClass = "block text-[9px] font-bold uppercase tracking-[0.15em] text-[#7A706A] mb-1.5"
 
 export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
   if (materials.length === 0) {
@@ -36,9 +47,19 @@ function MaterialRow({ material }: { material: Material }) {
   const [status, setStatus] = useState(material.status)
   const [featured, setFeatured] = useState(material.featured)
   const [resultado, setResultado] = useState(material.resultado ?? "")
+  const [editing, setEditing] = useState(false)
   const [saving, setSaving] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [resultadoSaved, setResultadoSaved] = useState(false)
+
+  // edit form state
+  const [editTitle, setEditTitle] = useState(material.title)
+  const [editDesc, setEditDesc] = useState(material.description)
+  const [editType, setEditType] = useState(material.type)
+  const [editAuthor, setEditAuthor] = useState(material.author)
+  const [editPath, setEditPath] = useState(material.path)
+  const [editTags, setEditTags] = useState(material.tags.join(", "))
+  const [editError, setEditError] = useState("")
 
   async function handleStatus(newStatus: string) {
     setSaving(true)
@@ -62,6 +83,25 @@ function MaterialRow({ material }: { material: Material }) {
     setTimeout(() => setResultadoSaved(false), 2000)
   }
 
+  async function handleSaveEdit() {
+    setSaving(true)
+    setEditError("")
+    try {
+      await updateMaterial(material.id, {
+        title: editTitle.trim(),
+        description: editDesc.trim(),
+        type: editType,
+        author: editAuthor.trim(),
+        path: editPath.trim(),
+        tags: editTags.split(",").map(t => t.trim()).filter(Boolean),
+      })
+      setEditing(false)
+    } catch (err) {
+      setEditError(err instanceof Error ? err.message : "Erro ao salvar.")
+    }
+    setSaving(false)
+  }
+
   async function handleDelete() {
     if (!confirm(`Remover "${material.title}"?`)) return
     setDeleting(true)
@@ -69,17 +109,18 @@ function MaterialRow({ material }: { material: Material }) {
   }
 
   return (
-    <div className={["rounded-xl border bg-white p-5 transition-opacity", deleting ? "opacity-40" : "border-[#DDD5C8]"].join(" ")}>
+    <div className={["rounded-xl border bg-white p-5 transition-opacity", deleting ? "opacity-40 pointer-events-none" : "border-[#DDD5C8]"].join(" ")}>
+
+      {/* Header row */}
       <div className="flex items-start justify-between gap-4 mb-4">
         <div className="min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-serif text-[15px] text-[#1C1C1A] truncate">{material.title}</h3>
-            {saving && <span className="text-[9px] text-[#B5B0AA] shrink-0">Salvando...</span>}
-          </div>
-          <p className="text-[10px] text-[#B5B0AA] font-mono">{material.path}</p>
+          <h3 className="font-serif text-[15px] text-[#1C1C1A] truncate mb-0.5">{editTitle}</h3>
+          <p className="text-[10px] text-[#B5B0AA] font-mono">{editPath}</p>
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
+          {saving && <span className="text-[9px] text-[#B5B0AA]">Salvando...</span>}
+
           <button
             onClick={handleFeatured}
             title={featured ? "Remover destaque" : "Destacar"}
@@ -102,15 +143,69 @@ function MaterialRow({ material }: { material: Material }) {
           </select>
 
           <button
+            onClick={() => setEditing(e => !e)}
+            className={["text-[10px] font-semibold transition-colors", editing ? "text-[#B5894A]" : "text-[#7A706A] hover:text-[#1C1C1A]"].join(" ")}
+          >
+            {editing ? "Cancelar" : "Editar"}
+          </button>
+
+          <button
             onClick={handleDelete}
             disabled={deleting}
-            className="text-[10px] text-[#B5B0AA] hover:text-red-400 transition-colors ml-1"
+            className="text-[10px] text-[#B5B0AA] hover:text-red-400 transition-colors"
           >
             Remover
           </button>
         </div>
       </div>
 
+      {/* Edit form (expandable) */}
+      {editing && (
+        <div className="mb-5 p-4 bg-[#F8F4EE] rounded-lg border border-[#EDE6DC] space-y-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="col-span-2">
+              <label className={labelClass}>Título</label>
+              <input value={editTitle} onChange={e => setEditTitle(e.target.value)} className={inputClass} />
+            </div>
+            <div className="col-span-2">
+              <label className={labelClass}>Descrição</label>
+              <input value={editDesc} onChange={e => setEditDesc(e.target.value)} className={inputClass} />
+            </div>
+            <div>
+              <label className={labelClass}>Tipo</label>
+              <select value={editType} onChange={e => setEditType(e.target.value as MaterialType)} className={inputClass}>
+                {TYPE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className={labelClass}>Autor</label>
+              <input value={editAuthor} onChange={e => setEditAuthor(e.target.value)} className={inputClass} />
+            </div>
+            <div>
+              <label className={labelClass}>Rota</label>
+              <input value={editPath} onChange={e => setEditPath(e.target.value)} className={inputClass} placeholder="/nome-do-material" />
+            </div>
+            <div>
+              <label className={labelClass}>Tags (vírgula)</label>
+              <input value={editTags} onChange={e => setEditTags(e.target.value)} className={inputClass} placeholder="Tag 1, Tag 2" />
+            </div>
+          </div>
+
+          {editError && <p className="text-[11px] text-red-500">{editError}</p>}
+
+          <div className="flex justify-end pt-1">
+            <button
+              onClick={handleSaveEdit}
+              disabled={saving}
+              className="bg-[#1C1C1A] text-white text-[11px] font-bold px-5 py-2 rounded-lg hover:bg-[#2E2B28] transition-colors disabled:opacity-50"
+            >
+              {saving ? "Salvando..." : "Salvar alterações"}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Resultado */}
       <div>
         <label className="block text-[9px] font-bold uppercase tracking-[0.15em] text-[#B5894A] mb-1.5">
           Resultado
@@ -122,10 +217,8 @@ function MaterialRow({ material }: { material: Material }) {
           placeholder="Observações pós-uso: CTR, candidaturas, resultado da campanha..."
           className="w-full text-[12px] bg-[#F8F4EE] border border-[#DDD5C8] rounded-lg px-3 py-2 text-[#2E2B28] placeholder-[#C5C0BB] focus:outline-none focus:border-[#B5894A] resize-none transition-colors"
         />
-        <div className="flex justify-end mt-1.5">
-          {resultadoSaved && (
-            <span className="text-[10px] text-emerald-600 mr-2">Salvo!</span>
-          )}
+        <div className="flex justify-end mt-1.5 items-center gap-3">
+          {resultadoSaved && <span className="text-[10px] text-emerald-600">Salvo!</span>}
           <button
             onClick={handleSaveResultado}
             disabled={saving}
@@ -135,6 +228,7 @@ function MaterialRow({ material }: { material: Material }) {
           </button>
         </div>
       </div>
+
     </div>
   )
 }

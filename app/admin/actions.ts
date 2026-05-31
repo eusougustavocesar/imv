@@ -58,6 +58,22 @@ export async function createMaterial(data: {
   revalidatePath("/admin")
 }
 
+export async function updateMaterial(id: string, data: {
+  title: string
+  description: string
+  type: string
+  author: string
+  path: string
+  tags: string[]
+}) {
+  await verifyAdmin()
+  const db = createAdminClient()
+  const { error } = await db.from("materials").update(data).eq("id", id)
+  if (error) throw new Error(error.message)
+  revalidatePath("/")
+  revalidatePath("/admin")
+}
+
 export async function deleteMaterial(id: string) {
   await verifyAdmin()
   const db = createAdminClient()
