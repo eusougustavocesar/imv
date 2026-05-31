@@ -114,3 +114,19 @@ ON CONFLICT (path) DO NOTHING;
 
 -- 8. Promover usuário a admin (rodar manualmente após criar o usuário)
 -- UPDATE profiles SET role = 'admin' WHERE id = '[uuid do usuário]';
+
+-- 9. Share links (migration v2 — rodar separado se já executou a v1)
+ALTER TABLE materials ADD COLUMN IF NOT EXISTS share_token UUID UNIQUE DEFAULT NULL;
+ALTER TABLE materials ADD COLUMN IF NOT EXISTS share_expires_at TIMESTAMPTZ DEFAULT NULL;
+
+CREATE INDEX IF NOT EXISTS materials_share_token_idx
+  ON materials(share_token) WHERE share_token IS NOT NULL;
+
+DROP POLICY IF EXISTS "materials_share_read" ON materials;
+CREATE POLICY "materials_share_read" ON materials
+  FOR SELECT TO anon
+  USING (
+    share_token IS NOT NULL
+    AND share_expires_at IS NOT NULL
+    AND share_expires_at > now()
+  );

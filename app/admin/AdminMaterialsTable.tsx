@@ -2,7 +2,10 @@
 
 import { useState } from "react"
 import type { Material, MaterialStatus, MaterialType } from "@/lib/supabase/types"
-import { updateMaterialStatus, toggleFeatured, updateResultado, updateMaterial, deleteMaterial } from "./actions"
+import {
+  updateMaterialStatus, toggleFeatured, updateResultado,
+  updateMaterial, deleteMaterial, generateShareLink, revokeShareLink,
+} from "./actions"
 
 const TYPE_OPTIONS = [
   { value: "pesquisa", label: "Pesquisa" },
@@ -29,13 +32,8 @@ const labelClass = "block text-[9px] font-bold uppercase tracking-[0.15em] text-
 
 export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
   if (materials.length === 0) {
-    return (
-      <p className="text-[12px] text-[#B5B0AA] text-center py-8">
-        Nenhum material cadastrado.
-      </p>
-    )
+    return <p className="text-[12px] text-[#B5B0AA] text-center py-8">Nenhum material cadastrado.</p>
   }
-
   return (
     <div className="space-y-3">
       {materials.map(m => <MaterialRow key={m.id} material={m} />)}
@@ -52,7 +50,12 @@ function MaterialRow({ material }: { material: Material }) {
   const [deleting, setDeleting] = useState(false)
   const [resultadoSaved, setResultadoSaved] = useState(false)
 
-  // edit form state
+  const [shareToken, setShareToken] = useState(material.share_token)
+  const [shareExpiry, setShareExpiry] = useState(material.share_expires_at)
+  const [shareUrl, setShareUrl] = useState("")
+  const [copied, setCopied] = useState(false)
+  const [sharingOpen, setSharingOpen] = useState(false)
+
   const [editTitle, setEditTitle] = useState(material.title)
   const [editDesc, setEditDesc] = useState(material.description)
   const [editType, setEditType] = useState(material.type)
@@ -60,6 +63,8 @@ function MaterialRow({ material }: { material: Material }) {
   const [editPath, setEditPath] = useState(material.path)
   const [editTags, setEditTags] = useState(material.tags.join(", "))
   const [editError, setEditError] = useState("")
+
+  const isShareActive = shareToken && shareExpiry && new Date(shareExpiry) > new Date()
 
   async function handleStatus(newStatus: string) {
     setSaving(true)
@@ -102,6 +107,34 @@ function MaterialRow({ material }: { material: Material }) {
     setSaving(false)
   }
 
+  async function handleGenerateShare() {
+    setSaving(true)
+    const token = await generateShareLink(material.id)
+    const expiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+    setShareToken(token)
+    setShareExpiry(expiry)
+    const url = `${window.location.origin}/s/${token}`
+    setShareUrl(url)
+    setSharingOpen(true)
+    setSaving(false)
+  }
+
+  async function handleRevoke() {
+    setSaving(true)
+    await revokeShareLink(material.id)
+    setShareToken(null)
+    setShareExpiry(null)
+    setShareUrl("")
+    setSaving(false)
+  }
+
+  function handleCopy() {
+    const url = shareUrl || `${window.location.origin}/s/${shareToken}`
+    navigator.clipboard.writeText(url)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
   async function handleDelete() {
     if (!confirm(`Remover "${material.title}"?`)) return
     setDeleting(true)
@@ -111,55 +144,91 @@ function MaterialRow({ material }: { material: Material }) {
   return (
     <div className={["rounded-xl border bg-white p-5 transition-opacity", deleting ? "opacity-40 pointer-events-none" : "border-[#DDD5C8]"].join(" ")}>
 
-      {/* Header row */}
+      {/* Header */}
       <div className="flex items-start justify-between gap-4 mb-4">
         <div className="min-w-0">
           <h3 className="font-serif text-[15px] text-[#1C1C1A] truncate mb-0.5">{editTitle}</h3>
           <p className="text-[10px] text-[#B5B0AA] font-mono">{editPath}</p>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
           {saving && <span className="text-[9px] text-[#B5B0AA]">Salvando...</span>}
 
           <button
             onClick={handleFeatured}
             title={featured ? "Remover destaque" : "Destacar"}
             className={["text-[16px] transition-colors", featured ? "text-[#B5894A]" : "text-[#DDD5C8] hover:text-[#B5894A]/50"].join(" ")}
-          >
-            ★
-          </button>
+          >★</button>
 
           <select
             value={status}
             onChange={e => handleStatus(e.target.value)}
-            className={[
-              "text-[10px] font-bold uppercase tracking-[0.06em] border rounded px-2 py-1 focus:outline-none focus:border-[#B5894A] cursor-pointer",
-              STATUS_STYLE[status],
-            ].join(" ")}
+            className={["text-[10px] font-bold uppercase tracking-[0.06em] border rounded px-2 py-1 focus:outline-none focus:border-[#B5894A] cursor-pointer", STATUS_STYLE[status]].join(" ")}
           >
-            {STATUS_OPTIONS.map(o => (
-              <option key={o.value} value={o.value}>{o.label}</option>
-            ))}
+            {STATUS_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
 
           <button
-            onClick={() => setEditing(e => !e)}
-            className={["text-[10px] font-semibold transition-colors", editing ? "text-[#B5894A]" : "text-[#7A706A] hover:text-[#1C1C1A]"].join(" ")}
+            onClick={() => { setSharingOpen(o => !o); if (!sharingOpen && isShareActive) setShareUrl(`${window.location.origin}/s/${shareToken}`) }}
+            className={["text-[10px] font-semibold transition-colors", (sharingOpen || isShareActive) ? "text-[#B5894A]" : "text-[#7A706A] hover:text-[#1C1C1A]"].join(" ")}
           >
+            {isShareActive ? "🔗 Ativo" : "Compartilhar"}
+          </button>
+
+          <button onClick={() => setEditing(e => !e)} className={["text-[10px] font-semibold transition-colors", editing ? "text-[#B5894A]" : "text-[#7A706A] hover:text-[#1C1C1A]"].join(" ")}>
             {editing ? "Cancelar" : "Editar"}
           </button>
 
-          <button
-            onClick={handleDelete}
-            disabled={deleting}
-            className="text-[10px] text-[#B5B0AA] hover:text-red-400 transition-colors"
-          >
+          <button onClick={handleDelete} disabled={deleting} className="text-[10px] text-[#B5B0AA] hover:text-red-400 transition-colors">
             Remover
           </button>
         </div>
       </div>
 
-      {/* Edit form (expandable) */}
+      {/* Share panel */}
+      {sharingOpen && (
+        <div className="mb-4 p-4 bg-[#F8F4EE] rounded-lg border border-[#EDE6DC]">
+          {isShareActive ? (
+            <div className="space-y-2">
+              <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-[#B5894A] mb-2">Link ativo</p>
+              <div className="flex gap-2">
+                <input
+                  readOnly
+                  value={shareUrl || `${window.location.origin}/s/${shareToken}`}
+                  className="flex-1 text-[11px] bg-white border border-[#DDD5C8] rounded-lg px-3 py-2 text-[#2E2B28] font-mono truncate"
+                />
+                <button
+                  onClick={handleCopy}
+                  className="shrink-0 text-[11px] font-bold px-3 py-2 rounded-lg bg-[#1C1C1A] text-white hover:bg-[#2E2B28] transition-colors"
+                >
+                  {copied ? "Copiado!" : "Copiar"}
+                </button>
+              </div>
+              <div className="flex items-center justify-between">
+                <p className="text-[10px] text-[#B5B0AA]">
+                  Expira em {new Date(shareExpiry!).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" })}
+                </p>
+                <button onClick={handleRevoke} disabled={saving} className="text-[10px] text-red-400 hover:text-red-600 transition-colors disabled:opacity-50">
+                  Revogar link
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between">
+              <p className="text-[12px] text-[#7A706A]">Gera um link público com validade de 30 dias.</p>
+              <button
+                onClick={handleGenerateShare}
+                disabled={saving}
+                className="text-[11px] font-bold px-4 py-2 bg-[#1C1C1A] text-white rounded-lg hover:bg-[#2E2B28] transition-colors disabled:opacity-50"
+              >
+                Gerar link
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Edit form */}
       {editing && (
         <div className="mb-5 p-4 bg-[#F8F4EE] rounded-lg border border-[#EDE6DC] space-y-3">
           <div className="grid grid-cols-2 gap-3">
@@ -190,15 +259,9 @@ function MaterialRow({ material }: { material: Material }) {
               <input value={editTags} onChange={e => setEditTags(e.target.value)} className={inputClass} placeholder="Tag 1, Tag 2" />
             </div>
           </div>
-
           {editError && <p className="text-[11px] text-red-500">{editError}</p>}
-
           <div className="flex justify-end pt-1">
-            <button
-              onClick={handleSaveEdit}
-              disabled={saving}
-              className="bg-[#1C1C1A] text-white text-[11px] font-bold px-5 py-2 rounded-lg hover:bg-[#2E2B28] transition-colors disabled:opacity-50"
-            >
+            <button onClick={handleSaveEdit} disabled={saving} className="bg-[#1C1C1A] text-white text-[11px] font-bold px-5 py-2 rounded-lg hover:bg-[#2E2B28] transition-colors disabled:opacity-50">
               {saving ? "Salvando..." : "Salvar alterações"}
             </button>
           </div>
@@ -207,9 +270,7 @@ function MaterialRow({ material }: { material: Material }) {
 
       {/* Resultado */}
       <div>
-        <label className="block text-[9px] font-bold uppercase tracking-[0.15em] text-[#B5894A] mb-1.5">
-          Resultado
-        </label>
+        <label className="block text-[9px] font-bold uppercase tracking-[0.15em] text-[#B5894A] mb-1.5">Resultado</label>
         <textarea
           value={resultado}
           onChange={e => setResultado(e.target.value)}
@@ -219,11 +280,7 @@ function MaterialRow({ material }: { material: Material }) {
         />
         <div className="flex justify-end mt-1.5 items-center gap-3">
           {resultadoSaved && <span className="text-[10px] text-emerald-600">Salvo!</span>}
-          <button
-            onClick={handleSaveResultado}
-            disabled={saving}
-            className="text-[11px] font-semibold text-[#B5894A] hover:text-[#C4956A] transition-colors disabled:opacity-50"
-          >
+          <button onClick={handleSaveResultado} disabled={saving} className="text-[11px] font-semibold text-[#B5894A] hover:text-[#C4956A] transition-colors disabled:opacity-50">
             Salvar resultado
           </button>
         </div>

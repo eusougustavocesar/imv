@@ -81,6 +81,30 @@ export async function updateUserRole(userId: string, role: "viewer" | "admin") {
   revalidatePath("/admin")
 }
 
+export async function generateShareLink(id: string): Promise<string> {
+  await verifyAdmin()
+  const db = createAdminClient()
+  const token = crypto.randomUUID()
+  const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+  const { error } = await db
+    .from("materials")
+    .update({ share_token: token, share_expires_at: expiresAt })
+    .eq("id", id)
+  if (error) throw new Error(error.message)
+  revalidatePath("/admin")
+  return token
+}
+
+export async function revokeShareLink(id: string) {
+  await verifyAdmin()
+  const db = createAdminClient()
+  await db
+    .from("materials")
+    .update({ share_token: null, share_expires_at: null })
+    .eq("id", id)
+  revalidatePath("/admin")
+}
+
 export async function deleteMaterial(id: string) {
   await verifyAdmin()
   const db = createAdminClient()

@@ -20,6 +20,8 @@ export type Material = {
   featured: boolean
   tags: string[]
   resultado: string | null
+  share_token: string | null
+  share_expires_at: string | null
   created_at: string
   updated_at: string
 }
