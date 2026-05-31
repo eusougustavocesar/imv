@@ -74,6 +74,13 @@ export async function updateMaterial(id: string, data: {
   revalidatePath("/admin")
 }
 
+export async function updateUserRole(userId: string, role: "viewer" | "admin") {
+  await verifyAdmin()
+  const db = createAdminClient()
+  await db.from("profiles").update({ role }).eq("id", userId)
+  revalidatePath("/admin")
+}
+
 export async function deleteMaterial(id: string) {
   await verifyAdmin()
   const db = createAdminClient()
