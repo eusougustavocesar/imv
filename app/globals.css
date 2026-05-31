@@ -26,6 +26,17 @@
   --color-imv-text:        #2E2B28;
   --color-imv-muted:       #7A706A;
   --color-imv-subtle:      #B5B0AA;
+
+  /* Type scale */
+  --font-size-label:    9px;
+  --font-size-meta:     10px;
+  --font-size-caption:  11px;
+  --font-size-body-sm:  12px;
+  --font-size-body:     13px;
+  --font-size-card:     15px;
+  --font-size-subhead:  18px;
+  --font-size-heading:  20px;
+  --font-size-display:  22px;
 }
 
 /* ── CSS Variables (non-Tailwind usage) ────────────── */

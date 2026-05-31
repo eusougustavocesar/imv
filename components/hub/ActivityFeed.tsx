@@ -20,14 +20,14 @@ export function ActivityFeed({ items }: { items: Material[] }) {
           new Date(item.updated_at).getTime() - new Date(item.created_at).getTime()
         ) < 2000
         return (
-          <div key={item.id} className="flex items-start gap-3 text-[12px]">
+          <div key={item.id} className="flex items-start gap-3 text-body-sm">
             <span className="text-imv-copper font-bold shrink-0 mt-0.5">·</span>
             <span className="text-imv-muted leading-[1.5]">
               <span className="font-semibold text-imv-text">{item.author}</span>
               {" "}{isNew ? "adicionou" : "atualizou"}{" "}
               <span className="text-imv-text">{item.title}</span>
             </span>
-            <span className="text-imv-copper text-[10px] shrink-0 ml-auto mt-0.5">
+            <span className="text-imv-copper text-meta shrink-0 ml-auto mt-0.5">
               {timeAgo(item.updated_at)}
             </span>
           </div>

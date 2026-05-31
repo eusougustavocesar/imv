@@ -38,24 +38,24 @@ export default async function AdminPage() {
       <main className="hub-wrap py-10">
 
         <div className="flex items-baseline justify-between mb-6">
-          <h1 className="font-serif text-[22px] text-imv-dark">Materiais</h1>
-          <span className="text-[11px] text-imv-subtle">{materials?.length ?? 0} cadastrados</span>
+          <h1 className="font-serif text-display text-imv-dark">Materiais</h1>
+          <span className="text-caption text-imv-subtle">{materials?.length ?? 0} cadastrados</span>
         </div>
 
         <AdminMaterialsTable materials={materials ?? []} />
 
         <div className="mt-12 pt-8 border-t border-imv-border">
-          <h2 className="font-serif text-[18px] text-imv-dark mb-6">Novo Material</h2>
+          <h2 className="font-serif text-subhead text-imv-dark mb-6">Novo Material</h2>
           <NewMaterialForm />
         </div>
 
         <div className="mt-12 pt-8 border-t border-imv-border">
           <div className="flex items-baseline justify-between mb-6">
-            <h2 className="font-serif text-[18px] text-imv-dark">Usuários</h2>
-            <span className="text-[11px] text-imv-subtle">{users.length} membros</span>
+            <h2 className="font-serif text-subhead text-imv-dark">Usuários</h2>
+            <span className="text-caption text-imv-subtle">{users.length} membros</span>
           </div>
           <UsersTable users={users} />
-          <p className="text-[10px] text-imv-subtle mt-3">
+          <p className="text-meta text-imv-subtle mt-3">
             Clique no role para alternar entre viewer e admin. Novos usuários são criados no{" "}
             <a
               href="https://supabase.com/dashboard/project/mdwnsmelijqyzfewey/auth/users"

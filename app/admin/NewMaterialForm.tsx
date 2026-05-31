@@ -2,18 +2,19 @@
 
 import { useState } from "react"
 import { createMaterial } from "./actions"
+import { Button } from "@/components/hub/Button"
 
 const TYPE_OPTIONS = [
-  { value: "pesquisa", label: "Pesquisa" },
-  { value: "pauta", label: "Pauta" },
+  { value: "pesquisa",   label: "Pesquisa" },
+  { value: "pauta",      label: "Pauta" },
   { value: "estrategia", label: "Estratégia" },
-  { value: "campanha", label: "Campanha" },
-  { value: "outro", label: "Outro" },
+  { value: "campanha",   label: "Campanha" },
+  { value: "outro",      label: "Outro" },
 ]
 
 const STATUS_OPTIONS = [
-  { value: "rascunho", label: "Rascunho" },
-  { value: "ativo", label: "Ativo" },
+  { value: "rascunho",  label: "Rascunho" },
+  { value: "ativo",     label: "Ativo" },
   { value: "arquivado", label: "Arquivado" },
 ]
 
@@ -32,16 +33,14 @@ export function NewMaterialForm() {
 
     try {
       await createMaterial({
-        title: data.get("title") as string,
+        title:  data.get("title")  as string,
         description: data.get("description") as string,
-        type: data.get("type") as string,
+        type:   data.get("type")   as string,
         status: data.get("status") as string,
         author: data.get("author") as string,
-        path: data.get("path") as string,
+        path:   data.get("path")   as string,
         tags: (data.get("tags") as string)
-          .split(",")
-          .map(t => t.trim())
-          .filter(Boolean),
+          .split(",").map(t => t.trim()).filter(Boolean),
       })
 
       form.reset()
@@ -54,8 +53,8 @@ export function NewMaterialForm() {
     setLoading(false)
   }
 
-  const inputClass = "w-full bg-white border border-imv-border rounded-lg px-3 py-2.5 text-[12px] text-imv-text focus:outline-none focus:border-imv-copper transition-colors placeholder-imv-subtle"
-  const labelClass = "block text-[9px] font-bold uppercase tracking-[0.15em] text-imv-muted mb-1.5"
+  const inputClass = "w-full bg-white border border-imv-border rounded-lg px-3 py-2.5 text-body-sm text-imv-text focus:outline-none focus:border-imv-copper transition-colors placeholder-imv-subtle"
+  const labelClass = "block text-label font-bold uppercase tracking-[0.15em] text-imv-muted mb-1.5"
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -102,18 +101,14 @@ export function NewMaterialForm() {
 
       </div>
 
-      {error && <p className="text-[11px] text-red-500">{error}</p>}
+      {error && <p className="text-caption text-red-500">{error}</p>}
 
       <div className="flex items-center gap-3 pt-2">
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-imv-dark text-white font-bold text-[12px] px-6 py-2.5 rounded-lg hover:bg-imv-text transition-colors disabled:opacity-50"
-        >
+        <Button type="submit" size="md" disabled={loading}>
           {loading ? "Criando..." : "Criar Material"}
-        </button>
+        </Button>
         {success && (
-          <span className="text-[11px] text-emerald-600 font-semibold">Material criado!</span>
+          <span className="text-caption text-emerald-600 font-semibold">Material criado!</span>
         )}
       </div>
     </form>

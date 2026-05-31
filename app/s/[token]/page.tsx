@@ -3,20 +3,7 @@ import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-
-const TYPE_LABELS: Record<string, string> = {
-  pesquisa: "Pesquisa",
-  pauta: "Pauta",
-  estrategia: "Estratégia",
-  campanha: "Campanha",
-  outro: "Outro",
-}
-
-const STATUS_LABELS: Record<string, string> = {
-  ativo: "Ativo",
-  rascunho: "Rascunho",
-  arquivado: "Arquivado",
-}
+import { TYPE_LABELS, STATUS_LABELS } from "@/lib/supabase/types"
 
 async function getMaterial(token: string) {
   const supabase = createClient(
@@ -65,7 +52,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
           height={30}
           className="object-contain"
         />
-        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30">
+        <span className="text-meta font-bold uppercase tracking-[0.2em] text-white/30">
           Documento Compartilhado
         </span>
       </header>
@@ -77,19 +64,19 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
 
             <div className="px-8 pt-8 pb-6 border-b border-imv-dark-border">
               <div className="flex items-center gap-2 mb-4">
-                <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-imv-copper bg-imv-copper/15 border border-imv-copper/30 px-2.5 py-1 rounded">
+                <span className="text-label font-bold uppercase tracking-[0.18em] text-imv-copper bg-imv-copper/15 border border-imv-copper/30 px-2.5 py-1 rounded">
                   {TYPE_LABELS[material.type] ?? material.type}
                 </span>
-                <span className="text-[9px] font-bold uppercase tracking-[0.1em] text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2.5 py-1 rounded">
+                <span className="text-label font-bold uppercase tracking-[0.1em] text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2.5 py-1 rounded">
                   {STATUS_LABELS[material.status] ?? material.status}
                 </span>
               </div>
 
-              <h1 className="font-serif text-[22px] text-white leading-[1.3] mb-3">
+              <h1 className="font-serif text-display text-white leading-[1.3] mb-3">
                 {material.title}
               </h1>
 
-              <p className="text-[13px] text-white/60 leading-[1.6]">
+              <p className="text-body text-white/60 leading-[1.6]">
                 {material.description}
               </p>
             </div>
@@ -98,7 +85,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
               {material.tags?.length > 0 && (
                 <div className="flex flex-wrap gap-1.5">
                   {material.tags.map((tag: string) => (
-                    <span key={tag} className="text-[9px] bg-white/5 text-white/40 border border-white/10 px-2.5 py-1 rounded">
+                    <span key={tag} className="text-label bg-white/5 text-white/40 border border-white/10 px-2.5 py-1 rounded">
                       {tag}
                     </span>
                   ))}
@@ -107,12 +94,12 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
 
               <div className="flex items-center justify-between pt-2">
                 <div>
-                  <p className="text-[10px] text-white/30 uppercase tracking-[0.1em] mb-0.5">Elaborado por</p>
-                  <p className="text-[12px] font-semibold text-white/70">{material.author}</p>
+                  <p className="text-meta text-white/30 uppercase tracking-[0.1em] mb-0.5">Elaborado por</p>
+                  <p className="text-body-sm font-semibold text-white/70">{material.author}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[10px] text-white/30 uppercase tracking-[0.1em] mb-0.5">Produzido em</p>
-                  <p className="text-[12px] text-white/50">
+                  <p className="text-meta text-white/30 uppercase tracking-[0.1em] mb-0.5">Produzido em</p>
+                  <p className="text-body-sm text-white/50">
                     {createdAt.toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" })}
                   </p>
                 </div>
@@ -120,12 +107,12 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
             </div>
 
             <div className="px-8 py-6 bg-imv-dark border-t border-imv-dark-border">
-              <p className="text-[11px] text-white/40 text-center mb-4">
+              <p className="text-caption text-white/40 text-center mb-4">
                 Para acesso ao documento completo, entre em contato com a equipe de marketing IMV Academy.
               </p>
               <Link
                 href="/"
-                className="block text-center text-[12px] font-bold text-imv-copper hover:text-imv-copper-mid transition-colors"
+                className="block text-center text-body-sm font-bold text-imv-copper hover:text-imv-copper-mid transition-colors"
               >
                 hub.imvacademy.com →
               </Link>
@@ -133,7 +120,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
 
           </div>
 
-          <p className="text-center text-[10px] text-white/20 mt-5">
+          <p className="text-center text-meta text-white/20 mt-5">
             Link válido até {expiresAt.toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })}
           </p>
         </div>

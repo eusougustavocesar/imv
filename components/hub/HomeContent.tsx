@@ -46,7 +46,7 @@ export function HomeContent({ materials, isAdmin }: Props) {
 
       {!isFiltering && featured.length > 0 && (
         <section className="mb-10">
-          <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-imv-copper mb-4">
+          <p className="text-label font-bold uppercase tracking-[0.25em] text-imv-copper mb-4">
             Em Destaque
           </p>
           <div className="grid gap-4">
@@ -58,7 +58,7 @@ export function HomeContent({ materials, isAdmin }: Props) {
       {(isFiltering ? filtered : regular).length > 0 && (
         <section className="mb-10">
           {!isFiltering && (
-            <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-imv-muted mb-4">
+            <p className="text-label font-bold uppercase tracking-[0.25em] text-imv-muted mb-4">
               Materiais · {regular.length + featured.length}
             </p>
           )}
@@ -72,7 +72,7 @@ export function HomeContent({ materials, isAdmin }: Props) {
 
       {!isFiltering && archived.length > 0 && (
         <section className="mb-10">
-          <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-imv-subtle mb-4">
+          <p className="text-label font-bold uppercase tracking-[0.25em] text-imv-subtle mb-4">
             Arquivados · {archived.length}
           </p>
           <div className="grid gap-3 opacity-60">
@@ -83,15 +83,15 @@ export function HomeContent({ materials, isAdmin }: Props) {
 
       {filtered.length === 0 && materials.length > 0 && (
         <div className="text-center py-16 text-imv-subtle">
-          <p className="text-[13px]">Nenhum material com esse filtro.</p>
+          <p className="text-body">Nenhum material com esse filtro.</p>
         </div>
       )}
 
       {materials.length === 0 && (
         <div className="text-center py-20 text-imv-subtle">
-          <p className="text-[13px]">Nenhum material ainda.</p>
+          <p className="text-body">Nenhum material ainda.</p>
           {isAdmin && (
-            <Link href="/admin" className="text-[12px] text-imv-copper mt-2 inline-block hover:underline">
+            <Link href="/admin" className="text-body-sm text-imv-copper mt-2 inline-block hover:underline">
               Adicionar material no painel admin →
             </Link>
           )}
@@ -100,7 +100,7 @@ export function HomeContent({ materials, isAdmin }: Props) {
 
       {recent.length > 0 && (
         <section className="mt-4 pt-8 border-t border-imv-border">
-          <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-imv-subtle mb-4">
+          <p className="text-label font-bold uppercase tracking-[0.25em] text-imv-subtle mb-4">
             Atividade Recente
           </p>
           <ActivityFeed items={recent} />

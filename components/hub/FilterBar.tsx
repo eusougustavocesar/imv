@@ -3,18 +3,18 @@
 import type { MaterialType, MaterialStatus } from "@/lib/supabase/types"
 
 const TYPES: { value: MaterialType | "todos"; label: string }[] = [
-  { value: "todos", label: "Todos" },
-  { value: "pesquisa", label: "Pesquisa" },
-  { value: "pauta", label: "Pauta" },
+  { value: "todos",      label: "Todos" },
+  { value: "pesquisa",   label: "Pesquisa" },
+  { value: "pauta",      label: "Pauta" },
   { value: "estrategia", label: "Estratégia" },
-  { value: "campanha", label: "Campanha" },
-  { value: "outro", label: "Outro" },
+  { value: "campanha",   label: "Campanha" },
+  { value: "outro",      label: "Outro" },
 ]
 
 const STATUSES: { value: MaterialStatus | "todos"; label: string }[] = [
-  { value: "todos", label: "Todos" },
-  { value: "ativo", label: "Ativo" },
-  { value: "rascunho", label: "Rascunho" },
+  { value: "todos",     label: "Todos" },
+  { value: "ativo",     label: "Ativo" },
+  { value: "rascunho",  label: "Rascunho" },
   { value: "arquivado", label: "Arquivado" },
 ]
 
@@ -35,7 +35,7 @@ export function FilterBar({ type, status, onType, onStatus, total }: Props) {
             key={t.value}
             onClick={() => onType(t.value as MaterialType | "todos")}
             className={[
-              "text-[10px] font-bold uppercase tracking-[0.1em] px-3 py-1.5 rounded-lg border transition-all",
+              "text-meta font-bold uppercase tracking-[0.1em] px-3 py-1.5 rounded-lg border transition-all",
               type === t.value
                 ? "bg-imv-dark text-white border-imv-dark"
                 : "bg-white text-imv-muted border-imv-border hover:border-imv-copper/40 hover:text-imv-text",
@@ -54,7 +54,7 @@ export function FilterBar({ type, status, onType, onStatus, total }: Props) {
             key={s.value}
             onClick={() => onStatus(s.value as MaterialStatus | "todos")}
             className={[
-              "text-[10px] font-bold uppercase tracking-[0.1em] px-3 py-1.5 rounded-lg border transition-all",
+              "text-meta font-bold uppercase tracking-[0.1em] px-3 py-1.5 rounded-lg border transition-all",
               status === s.value
                 ? "bg-imv-copper text-white border-imv-copper"
                 : "bg-white text-imv-muted border-imv-border hover:border-imv-copper/40 hover:text-imv-text",
@@ -65,7 +65,7 @@ export function FilterBar({ type, status, onType, onStatus, total }: Props) {
         ))}
       </div>
 
-      <span className="text-[10px] text-imv-subtle ml-auto">
+      <span className="text-meta text-imv-subtle ml-auto">
         {total} {total === 1 ? "material" : "materiais"}
       </span>
     </div>

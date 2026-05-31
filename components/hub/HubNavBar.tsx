@@ -38,7 +38,7 @@ export async function HubNavBar({ variant = "hub", isAdmin: isAdminProp }: Props
             className="object-contain"
           />
           <span className={[
-            "text-[10px] font-bold uppercase tracking-[0.2em] border-l border-white/10 pl-3 transition-colors",
+            "text-meta font-bold uppercase tracking-[0.2em] border-l border-white/10 pl-3 transition-colors",
             variant === "admin"
               ? "text-imv-copper"
               : "text-white/30 group-hover:text-white/50",
@@ -51,7 +51,7 @@ export async function HubNavBar({ variant = "hub", isAdmin: isAdminProp }: Props
           {variant === "hub" && isAdmin && (
             <Link
               href="/admin"
-              className="text-[10px] font-semibold uppercase tracking-[0.12em] text-imv-copper hover:text-imv-copper-mid transition-colors"
+              className="text-meta font-semibold uppercase tracking-[0.12em] text-imv-copper hover:text-imv-copper-mid transition-colors"
             >
               Admin
             </Link>
@@ -59,7 +59,7 @@ export async function HubNavBar({ variant = "hub", isAdmin: isAdminProp }: Props
           {variant === "admin" && (
             <Link
               href="/"
-              className="text-[11px] text-white/40 hover:text-white/60 transition-colors"
+              className="text-caption text-white/40 hover:text-white/60 transition-colors"
             >
               ← Hub
             </Link>

@@ -1,38 +1,34 @@
 "use client"
 
 import { useState } from "react"
-import type { Material, MaterialStatus, MaterialType } from "@/lib/supabase/types"
+import type { Material, MaterialType } from "@/lib/supabase/types"
+import { TYPE_LABELS, STATUS_LABELS, STATUS_STYLE } from "@/lib/supabase/types"
+import { Button } from "@/components/hub/Button"
 import {
   updateMaterialStatus, toggleFeatured, updateResultado,
   updateMaterial, deleteMaterial, generateShareLink, revokeShareLink,
 } from "./actions"
 
 const TYPE_OPTIONS = [
-  { value: "pesquisa", label: "Pesquisa" },
-  { value: "pauta", label: "Pauta" },
+  { value: "pesquisa",   label: "Pesquisa" },
+  { value: "pauta",      label: "Pauta" },
   { value: "estrategia", label: "Estratégia" },
-  { value: "campanha", label: "Campanha" },
-  { value: "outro", label: "Outro" },
+  { value: "campanha",   label: "Campanha" },
+  { value: "outro",      label: "Outro" },
 ]
 
 const STATUS_OPTIONS = [
-  { value: "rascunho", label: "Rascunho" },
-  { value: "ativo", label: "Ativo" },
+  { value: "rascunho",  label: "Rascunho" },
+  { value: "ativo",     label: "Ativo" },
   { value: "arquivado", label: "Arquivado" },
 ]
 
-const STATUS_STYLE: Record<string, string> = {
-  ativo: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  rascunho: "bg-imv-beige text-imv-muted border-imv-border",
-  arquivado: "bg-gray-50 text-gray-400 border-gray-200",
-}
-
-const inputClass = "w-full bg-white border border-imv-border rounded-lg px-3 py-2 text-[12px] text-imv-text focus:outline-none focus:border-imv-copper transition-colors placeholder-imv-subtle"
-const labelClass = "block text-[9px] font-bold uppercase tracking-[0.15em] text-imv-muted mb-1.5"
+const inputClass = "w-full bg-white border border-imv-border rounded-lg px-3 py-2 text-body-sm text-imv-text focus:outline-none focus:border-imv-copper transition-colors placeholder-imv-subtle"
+const labelClass = "block text-label font-bold uppercase tracking-[0.15em] text-imv-muted mb-1.5"
 
 export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
   if (materials.length === 0) {
-    return <p className="text-[12px] text-imv-subtle text-center py-8">Nenhum material cadastrado.</p>
+    return <p className="text-body-sm text-imv-subtle text-center py-8">Nenhum material cadastrado.</p>
   }
   return (
     <div className="space-y-3">
@@ -57,19 +53,19 @@ function MaterialRow({ material }: { material: Material }) {
   const [copied, setCopied] = useState(false)
   const [sharingOpen, setSharingOpen] = useState(false)
 
-  const [editTitle, setEditTitle] = useState(material.title)
-  const [editDesc, setEditDesc] = useState(material.description)
-  const [editType, setEditType] = useState(material.type)
+  const [editTitle,  setEditTitle]  = useState(material.title)
+  const [editDesc,   setEditDesc]   = useState(material.description)
+  const [editType,   setEditType]   = useState(material.type)
   const [editAuthor, setEditAuthor] = useState(material.author)
-  const [editPath, setEditPath] = useState(material.path)
-  const [editTags, setEditTags] = useState(material.tags.join(", "))
-  const [editError, setEditError] = useState("")
+  const [editPath,   setEditPath]   = useState(material.path)
+  const [editTags,   setEditTags]   = useState(material.tags.join(", "))
+  const [editError,  setEditError]  = useState("")
 
   const isShareActive = shareToken && shareExpiry && new Date(shareExpiry) > new Date()
 
   async function handleStatus(newStatus: string) {
     setSaving(true)
-    setStatus(newStatus as MaterialStatus)
+    setStatus(newStatus as typeof status)
     await updateMaterialStatus(material.id, newStatus)
     setSaving(false)
   }
@@ -94,12 +90,12 @@ function MaterialRow({ material }: { material: Material }) {
     setEditError("")
     try {
       await updateMaterial(material.id, {
-        title: editTitle.trim(),
+        title:  editTitle.trim(),
         description: editDesc.trim(),
-        type: editType,
+        type:   editType,
         author: editAuthor.trim(),
-        path: editPath.trim(),
-        tags: editTags.split(",").map(t => t.trim()).filter(Boolean),
+        path:   editPath.trim(),
+        tags:   editTags.split(",").map(t => t.trim()).filter(Boolean),
       })
       setEditing(false)
     } catch (err) {
@@ -147,12 +143,12 @@ function MaterialRow({ material }: { material: Material }) {
       {/* Header */}
       <div className="flex items-start justify-between gap-4 mb-4">
         <div className="min-w-0">
-          <h3 className="font-serif text-[15px] text-imv-dark truncate mb-0.5">{editTitle}</h3>
-          <p className="text-[10px] text-imv-subtle font-mono">{editPath}</p>
+          <h3 className="font-serif text-card text-imv-dark truncate mb-0.5">{editTitle}</h3>
+          <p className="text-meta text-imv-subtle font-mono">{editPath}</p>
         </div>
 
         <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
-          {saving && <span className="text-[9px] text-imv-subtle">Salvando...</span>}
+          {saving && <span className="text-label text-imv-subtle">Salvando...</span>}
 
           <button
             onClick={handleFeatured}
@@ -163,33 +159,36 @@ function MaterialRow({ material }: { material: Material }) {
           <select
             value={status}
             onChange={e => handleStatus(e.target.value)}
-            className={["text-[10px] font-bold uppercase tracking-[0.06em] border rounded px-2 py-1 focus:outline-none focus:border-imv-copper cursor-pointer", STATUS_STYLE[status]].join(" ")}
+            className={["text-meta font-bold uppercase tracking-[0.06em] border rounded px-2 py-1 focus:outline-none focus:border-imv-copper cursor-pointer", STATUS_STYLE[status]].join(" ")}
           >
-            {STATUS_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+            {STATUS_OPTIONS.map(o => <option key={o.value} value={o.value}>{STATUS_LABELS[o.value]}</option>)}
           </select>
 
           <button
             onClick={() => { setSharingOpen(o => !o); if (!sharingOpen && isShareActive) setShareUrl(`${window.location.origin}/s/${shareToken}`) }}
-            className={["text-[10px] font-semibold transition-colors", (sharingOpen || isShareActive) ? "text-imv-copper" : "text-imv-muted hover:text-imv-dark"].join(" ")}
+            className={["text-meta font-semibold transition-colors", (sharingOpen || isShareActive) ? "text-imv-copper" : "text-imv-muted hover:text-imv-dark"].join(" ")}
           >
             {isShareActive ? "🔗 Ativo" : "Compartilhar"}
           </button>
 
-          <button onClick={() => setEditing(e => !e)} className={["text-[10px] font-semibold transition-colors", editing ? "text-imv-copper" : "text-imv-muted hover:text-imv-dark"].join(" ")}>
+          <button
+            onClick={() => setEditing(e => !e)}
+            className={["text-meta font-semibold transition-colors", editing ? "text-imv-copper" : "text-imv-muted hover:text-imv-dark"].join(" ")}
+          >
             {editing ? "Cancelar" : "Editar"}
           </button>
 
           {confirmDelete ? (
             <div className="flex items-center gap-1.5">
-              <button onClick={handleDelete} disabled={deleting} className="text-[10px] font-bold text-red-500 hover:text-red-700 transition-colors">
+              <button onClick={handleDelete} disabled={deleting} className="text-meta font-bold text-red-500 hover:text-red-700 transition-colors">
                 Confirmar
               </button>
-              <button onClick={() => setConfirmDelete(false)} className="text-[10px] text-imv-subtle hover:text-imv-muted transition-colors">
+              <button onClick={() => setConfirmDelete(false)} className="text-meta text-imv-subtle hover:text-imv-muted transition-colors">
                 Cancelar
               </button>
             </div>
           ) : (
-            <button onClick={() => setConfirmDelete(true)} className="text-[10px] text-imv-subtle hover:text-red-400 transition-colors">
+            <button onClick={() => setConfirmDelete(true)} className="text-meta text-imv-subtle hover:text-red-400 transition-colors">
               Remover
             </button>
           )}
@@ -201,39 +200,32 @@ function MaterialRow({ material }: { material: Material }) {
         <div className="mb-4 p-4 bg-imv-cream rounded-lg border border-imv-beige">
           {isShareActive ? (
             <div className="space-y-2">
-              <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-imv-copper mb-2">Link ativo</p>
+              <p className="text-label font-bold uppercase tracking-[0.15em] text-imv-copper mb-2">Link ativo</p>
               <div className="flex gap-2">
                 <input
                   readOnly
                   value={shareUrl || `${window.location.origin}/s/${shareToken}`}
-                  className="flex-1 text-[11px] bg-white border border-imv-border rounded-lg px-3 py-2 text-imv-text font-mono truncate"
+                  className="flex-1 text-caption bg-white border border-imv-border rounded-lg px-3 py-2 text-imv-text font-mono truncate"
                 />
-                <button
-                  onClick={handleCopy}
-                  className="shrink-0 text-[11px] font-bold px-3 py-2 rounded-lg bg-imv-dark text-white hover:bg-imv-text transition-colors"
-                >
+                <Button onClick={handleCopy} className="shrink-0 px-3">
                   {copied ? "Copiado!" : "Copiar"}
-                </button>
+                </Button>
               </div>
               <div className="flex items-center justify-between">
-                <p className="text-[10px] text-imv-subtle">
+                <p className="text-meta text-imv-subtle">
                   Expira em {new Date(shareExpiry!).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" })}
                 </p>
-                <button onClick={handleRevoke} disabled={saving} className="text-[10px] text-red-400 hover:text-red-600 transition-colors disabled:opacity-50">
+                <button onClick={handleRevoke} disabled={saving} className="text-meta text-red-400 hover:text-red-600 transition-colors disabled:opacity-50">
                   Revogar link
                 </button>
               </div>
             </div>
           ) : (
             <div className="flex items-center justify-between">
-              <p className="text-[12px] text-imv-muted">Gera um link público com validade de 30 dias.</p>
-              <button
-                onClick={handleGenerateShare}
-                disabled={saving}
-                className="text-[11px] font-bold px-4 py-2 bg-imv-dark text-white rounded-lg hover:bg-imv-text transition-colors disabled:opacity-50"
-              >
+              <p className="text-body-sm text-imv-muted">Gera um link público com validade de 30 dias.</p>
+              <Button onClick={handleGenerateShare} disabled={saving}>
                 Gerar link
-              </button>
+              </Button>
             </div>
           )}
         </div>
@@ -254,7 +246,7 @@ function MaterialRow({ material }: { material: Material }) {
             <div>
               <label className={labelClass}>Tipo</label>
               <select value={editType} onChange={e => setEditType(e.target.value as MaterialType)} className={inputClass}>
-                {TYPE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                {TYPE_OPTIONS.map(o => <option key={o.value} value={o.value}>{TYPE_LABELS[o.value]}</option>)}
               </select>
             </div>
             <div>
@@ -270,28 +262,28 @@ function MaterialRow({ material }: { material: Material }) {
               <input value={editTags} onChange={e => setEditTags(e.target.value)} className={inputClass} placeholder="Tag 1, Tag 2" />
             </div>
           </div>
-          {editError && <p className="text-[11px] text-red-500">{editError}</p>}
+          {editError && <p className="text-caption text-red-500">{editError}</p>}
           <div className="flex justify-end pt-1">
-            <button onClick={handleSaveEdit} disabled={saving} className="bg-imv-dark text-white text-[11px] font-bold px-5 py-2 rounded-lg hover:bg-imv-text transition-colors disabled:opacity-50">
+            <Button onClick={handleSaveEdit} disabled={saving}>
               {saving ? "Salvando..." : "Salvar alterações"}
-            </button>
+            </Button>
           </div>
         </div>
       )}
 
       {/* Resultado */}
       <div>
-        <label className="block text-[9px] font-bold uppercase tracking-[0.15em] text-imv-copper mb-1.5">Resultado</label>
+        <label className="block text-label font-bold uppercase tracking-[0.15em] text-imv-copper mb-1.5">Resultado</label>
         <textarea
           value={resultado}
           onChange={e => setResultado(e.target.value)}
           rows={2}
           placeholder="Observações pós-uso: CTR, candidaturas, resultado da campanha..."
-          className="w-full text-[12px] bg-imv-cream border border-imv-border rounded-lg px-3 py-2 text-imv-text placeholder-imv-subtle focus:outline-none focus:border-imv-copper resize-none transition-colors"
+          className="w-full text-body-sm bg-imv-cream border border-imv-border rounded-lg px-3 py-2 text-imv-text placeholder-imv-subtle focus:outline-none focus:border-imv-copper resize-none transition-colors"
         />
         <div className="flex justify-end mt-1.5 items-center gap-3">
-          {resultadoSaved && <span className="text-[10px] text-emerald-600">Salvo!</span>}
-          <button onClick={handleSaveResultado} disabled={saving} className="text-[11px] font-semibold text-imv-copper hover:text-imv-copper-mid transition-colors disabled:opacity-50">
+          {resultadoSaved && <span className="text-meta text-emerald-600">Salvo!</span>}
+          <button onClick={handleSaveResultado} disabled={saving} className="text-caption font-semibold text-imv-copper hover:text-imv-copper-mid transition-colors disabled:opacity-50">
             Salvar resultado
           </button>
         </div>
