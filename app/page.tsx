@@ -1,9 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
-import Link from "next/link"
-import Image from "next/image"
+import { HubNavBar } from "@/components/hub/HubNavBar"
 import { HomeContent } from "@/components/hub/HomeContent"
-import { LogoutButton } from "@/components/hub/LogoutButton"
 import type { Material } from "@/lib/supabase/types"
 
 export default async function HomePage() {
@@ -22,36 +20,10 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-imv-white">
-
-      <header className="bg-imv-dark border-b border-imv-dark-border sticky top-0 z-10">
-        <div className="hub-wrap h-14 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Image
-              src="/logos/LOGO - ASSINATURA - BRANCO@4x.png"
-              alt="IMV"
-              width={100}
-              height={30}
-              className="object-contain"
-            />
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 border-l border-white/10 pl-3">
-              Hub
-            </span>
-          </div>
-          <div className="flex items-center gap-5">
-            {isAdmin && (
-              <Link href="/admin" className="text-[11px] font-semibold text-imv-copper hover:text-imv-copper-mid transition-colors">
-                Painel Admin
-              </Link>
-            )}
-            <LogoutButton />
-          </div>
-        </div>
-      </header>
-
+      <HubNavBar isAdmin={isAdmin} />
       <main className="hub-wrap py-10">
         <HomeContent materials={materials} isAdmin={isAdmin} />
       </main>
-
     </div>
   )
 }
